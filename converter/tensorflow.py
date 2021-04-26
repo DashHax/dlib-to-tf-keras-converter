@@ -2,7 +2,8 @@ import os
 import shutil
 
 import tensorflow as tf
-from tensorflow.keras import backend as K
+#from tensorflow.keras import backend as K
+from tensorflow.compat.v1.keras import backend as K
 from tensorflow.python.framework import graph_util
 from tensorflow.python.framework import graph_io
 

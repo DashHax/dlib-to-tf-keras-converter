@@ -17,7 +17,9 @@ import tensorflow as tf
 from tensorflow.keras import layers as KL
 from tensorflow.keras import models as KM
 from tensorflow.keras import backend as K
+from tensorflow.keras.utils import register_keras_serializable
 
+@register_keras_serializable()
 class ScaleLayer(KL.Layer):
     def __init__(self, **kwargs):
         super(ScaleLayer, self).__init__(**kwargs)
@@ -54,6 +56,7 @@ class ScaleLayer(KL.Layer):
         return input_shape
 
 
+@register_keras_serializable()
 class ReshapeLayer(KL.Layer):
     def __init__(self, **kwargs):
         super(ReshapeLayer, self).__init__(**kwargs)
@@ -178,7 +181,7 @@ def _residualDown(x, num_filters, filters, stage_num, conv_layer_counter,
             desired_channels = c1.shape.as_list()[1]
         arguments = {'desired_channels': desired_channels}
         pooled = KL.Lambda(
-            pad_depth, arguments=arguments,
+              pad_depth, arguments=arguments,
             name='pad_' + str(stage_num))(pooled)
 
     c1 = KL.Add()([pooled, c1])
