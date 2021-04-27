@@ -19,10 +19,12 @@ def main(args):
     load_weights(keras_model, args.xml_weights)
 
     # save it as h5
-    keras_model.save("dlib_fr.h5", custom_objects={
+    keras_model.save("dlib_fr.h5")
+    
+    """ keras_model.save("dlib_fr.h5", custom_objects={
         "ScaleLayer": ScaleLayer,
         "ReshapeLayer": ReshapeLayer
-    })
+    }) """
 
     converter = tf.lite.TFLiteConverter.from_keras_model(keras_model)
     tflite_model = converter.convert()
