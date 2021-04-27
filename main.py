@@ -2,7 +2,7 @@ import os
 import sys
 import argparse
 
-from converter.model import build_dlib_model
+from converter.model import build_dlib_model, ScaleLayer, ReshapeLayer
 from converter.weights import load_weights
 from converter.tensorflow import convert_to_tf_saved_model
 from converter.tensorflow import convert_to_tf_frozen_model
@@ -18,13 +18,16 @@ def main(args):
     load_weights(keras_model, args.xml_weights)
 
     # save it as h5
-    keras_model.save("dlib_face_recognition_resnet_model_v1.h5")
+    keras_model.save("dlib_face_recognition_resnet_model_v1.h5", custom_objects={
+        "ScaleLayer": ScaleLayer,
+        "ReshapeLayer": ReshapeLayer
+    })
 
-    # save it as saved_model
+    """ # save it as saved_model
     convert_to_tf_saved_model(keras_model, os.curdir)
 
     # save it as a frozen graph
-    convert_to_tf_frozen_model(keras_model, os.curdir)
+    convert_to_tf_frozen_model(keras_model, os.curdir) """
 
 
 def parse_arg(argv):
