@@ -2,6 +2,7 @@ import os
 import sys
 import argparse
 
+import tensorflow as tf
 from converter.model import build_dlib_model, ScaleLayer, ReshapeLayer
 from converter.weights import load_weights
 from converter.tensorflow import convert_to_tf_saved_model
@@ -18,10 +19,16 @@ def main(args):
     load_weights(keras_model, args.xml_weights)
 
     # save it as h5
-    keras_model.save("dlib_face_recognition_resnet_model_v1.h5", custom_objects={
+    keras_model.save("dlib_fr.h5", custom_objects={
         "ScaleLayer": ScaleLayer,
         "ReshapeLayer": ReshapeLayer
     })
+
+    converter = tf.lite.TFLiteConverter.from_keras_model(keras_model)
+    tflite_model = converter.convert()
+
+    with open("dlib_fr.tflite", "wb") as file_out:
+        file_out.write(tflite_model)
 
     """ # save it as saved_model
     convert_to_tf_saved_model(keras_model, os.curdir)
